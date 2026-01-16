@@ -402,3 +402,177 @@
         max-width: 300px;
     }
 }
+
+/* ========================================
+   RECRUITERS SECTION - ACCORDION STYLE
+   ======================================== */
+
+.recruiters-section {
+    padding: var(--spacing-16) 0;
+    background: linear-gradient(180deg, var(--neutral-50) 0%, white 100%);
+    position: relative;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-10);
+}
+
+.section-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    color: var(--neutral-900);
+    margin-bottom: var(--spacing-2);
+}
+
+.section-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--neutral-500);
+}
+
+/* Accordion Container */
+.recruiters-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Accordion Card */
+.recruiter-accordion-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--neutral-100);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.recruiter-accordion-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--neutral-200);
+}
+
+.recruiter-accordion-card.expanded {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-300);
+}
+
+/* Accordion Header - Siempre visible */
+.accordion-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4) var(--spacing-5);
+}
+
+.accordion-avatar {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-accent);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--primary-900);
+    flex-shrink: 0;
+}
+
+.accordion-name {
+    flex: 1;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--neutral-900);
+}
+
+.accordion-arrow {
+    color: var(--neutral-400);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.recruiter-accordion-card.expanded .accordion-arrow {
+    transform: rotate(180deg);
+    color: var(--accent-600);
+}
+
+/* Accordion Content - Se expande/colapsa */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 var(--spacing-5);
+}
+
+.recruiter-accordion-card.expanded .accordion-content {
+    max-height: 300px;
+    padding: 0 var(--spacing-5) var(--spacing-5);
+}
+
+.accordion-position {
+    font-size: var(--font-size-sm);
+    color: var(--neutral-500);
+    margin: 0 0 var(--spacing-4) 0;
+    padding-left: calc(44px + var(--spacing-4));
+}
+
+.accordion-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.accordion-whatsapp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-5);
+    background: #25D366;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    margin-top: var(--spacing-2);
+}
+
+.accordion-whatsapp-btn:hover {
+    background: #128C7E;
+    transform: scale(1.02);
+}
+
+.accordion-whatsapp-btn svg {
+    flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .section-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .recruiters-accordion {
+        padding: 0 var(--spacing-2);
+    }
+
+    .accordion-header {
+        padding: var(--spacing-3) var(--spacing-4);
+        gap: var(--spacing-3);
+    }
+
+    .accordion-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-base);
+    }
+
+    .accordion-position {
+        padding-left: calc(40px + var(--spacing-3));
+    }
+}

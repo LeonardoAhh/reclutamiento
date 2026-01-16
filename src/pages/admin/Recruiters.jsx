@@ -17,7 +17,9 @@ function Recruiters() {
         email: '',
         phone: '',
         extension: '',
-        department: ''
+        department: '',
+        whatsapp: '',
+        position: ''
     })
 
     useEffect(() => {
@@ -37,7 +39,9 @@ function Recruiters() {
             email: '',
             phone: '',
             extension: '',
-            department: ''
+            department: '',
+            whatsapp: '',
+            position: ''
         })
         setEditingRecruiter(null)
     }
@@ -50,7 +54,9 @@ function Recruiters() {
                 email: recruiter.email || '',
                 phone: recruiter.phone || '',
                 extension: recruiter.extension || '',
-                department: recruiter.department || ''
+                department: recruiter.department || '',
+                whatsapp: recruiter.whatsapp || '',
+                position: recruiter.position || ''
             })
         } else {
             resetForm()
@@ -222,54 +228,29 @@ function Recruiters() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Correo Electrónico *</label>
+                                    <label className="form-label">Puesto</label>
                                     <input
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
+                                        type="text"
+                                        name="position"
+                                        value={formData.position}
                                         onChange={handleChange}
                                         className="form-input"
-                                        placeholder="correo@vinoplastic.com"
-                                        required
+                                        placeholder="Ej: Coordinador RYS"
                                     />
-                                </div>
-
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label className="form-label">Teléfono *</label>
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            value={formData.phone}
-                                            onChange={handleChange}
-                                            className="form-input"
-                                            placeholder="442 123 4567"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="form-label">Extensión</label>
-                                        <input
-                                            type="text"
-                                            name="extension"
-                                            value={formData.extension}
-                                            onChange={handleChange}
-                                            className="form-input"
-                                            placeholder="Ej: 101"
-                                        />
-                                    </div>
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Departamento</label>
+                                    <label className="form-label">WhatsApp *</label>
                                     <input
-                                        type="text"
-                                        name="department"
-                                        value={formData.department}
+                                        type="tel"
+                                        name="whatsapp"
+                                        value={formData.whatsapp}
                                         onChange={handleChange}
                                         className="form-input"
-                                        placeholder="Ej: Recursos Humanos"
+                                        placeholder="+52 442 123 4567"
+                                        required
                                     />
+                                    <small className="form-help">Incluye código de país (+52 para México)</small>
                                 </div>
                             </div>
 

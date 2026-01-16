@@ -389,8 +389,8 @@ export const getUserByEmail = async (email) => {
         const q = query(usersCollection, where('email', '==', email));
         const snapshot = await getDocs(q);
         if (!snapshot.empty) {
-            const doc = snapshot.docs[0];
-            return { id: doc.id, ...doc.data() };
+            const docData = snapshot.docs[0];
+            return { id: docData.id, ...docData.data() };
         }
         return null;
     } catch (error) {
@@ -399,3 +399,83 @@ export const getUserByEmail = async (email) => {
     }
 };
 
+export const updateUserAvatar = async (userId, avatarStyle, avatarSeed) => {
+    try {
+        const docRef = doc(db, 'users', userId);
+        await updateDoc(docRef, {
+            avatarStyle,
+            avatarSeed
+        });
+        return true;
+    } catch (error) {
+        console.error('Error updating avatar:', error);
+        throw error;
+    }
+};
+
+// ========================================
+// IMPROVEMENT REQUESTS SERVICE
+// Sistema de solicitudes de mejoras
+// ========================================
+
+const requestsCollection = collection(db, 'improvementRequests');
+
+export const getImprovementRequests = async (userEmail = null) => {
+    try {
+        let q;
+        if (userEmail) {
+            // Filtrar por usuario específico
+            q = query(requestsCollection, where('userEmail', '==', userEmail), orderBy('createdAt', 'desc'));
+        } else {
+            // Obtener todas (para admin)
+            q = query(requestsCollection, orderBy('createdAt', 'desc'));
+        }
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(docData => ({
+            id: docData.id,
+            ...docData.data()
+        }));
+    } catch (error) {
+        console.error('Error getting requests:', error);
+        return [];
+    }
+};
+
+export const createImprovementRequest = async (requestData) => {
+    try {
+        const docRef = await addDoc(requestsCollection, {
+            ...requestData,
+            status: 'pending', // pending, in_progress, completed, rejected
+            createdAt: serverTimestamp()
+        });
+        return { id: docRef.id, ...requestData };
+    } catch (error) {
+        console.error('Error creating request:', error);
+        throw error;
+    }
+};
+
+export const updateImprovementRequest = async (id, data) => {
+    try {
+        const docRef = doc(db, 'improvementRequests', id);
+        await updateDoc(docRef, {
+            ...data,
+            updatedAt: serverTimestamp()
+        });
+        return { id, ...data };
+    } catch (error) {
+        console.error('Error updating request:', error);
+        throw error;
+    }
+};
+
+export const deleteImprovementRequest = async (id) => {
+    try {
+        const docRef = doc(db, 'improvementRequests', id);
+        await deleteDoc(docRef);
+        return true;
+    } catch (error) {
+        console.error('Error deleting request:', error);
+        throw error;
+    }
+};

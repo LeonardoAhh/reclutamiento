@@ -2,13 +2,19 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { auth } from '../firebase/config'
-import { getUserByEmail } from '../services/firebaseService'
+import { getUserByEmail, updateUserAvatar } from '../services/firebaseService'
 import { MOTIVATIONAL_MESSAGES } from '../data/motivationalMessages'
+import AvatarSelector, { generateAvatarSvg } from '../components/AvatarSelector'
 import VacancyManager from './admin/VacancyManager'
 import Candidates from './admin/Candidates'
 import Recruiters from './admin/Recruiters'
 import Positions from './admin/Positions'
+import ImprovementRequests from './admin/ImprovementRequests'
+import RequestsManager from './admin/RequestsManager'
 import './Admin.css'
+
+// Email del admin/desarrollador principal
+const ADMIN_EMAIL = 'capacitacionqro@vinoplastic.com'
 
 function Admin() {
     const navigate = useNavigate()
@@ -18,6 +24,8 @@ function Admin() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [currentMessage, setCurrentMessage] = useState('')
     const [messageIndex, setMessageIndex] = useState(0)
+    const [showAvatarSelector, setShowAvatarSelector] = useState(false)
+    const [avatarUrl, setAvatarUrl] = useState(null)
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -25,6 +33,11 @@ function Admin() {
             if (currentUser?.email) {
                 const userInfo = await getUserByEmail(currentUser.email)
                 setUserData(userInfo)
+                // Generar avatar si el usuario tiene configuración guardada
+                if (userInfo?.avatarStyle) {
+                    const url = generateAvatarSvg(userInfo.avatarStyle, userInfo.avatarSeed || userInfo.name)
+                    setAvatarUrl(url)
+                }
             }
             setLoading(false)
         })
@@ -55,6 +68,20 @@ function Admin() {
             navigate('/login')
         } catch (error) {
             console.error('Logout error:', error)
+        }
+    }
+
+    const handleAvatarSelect = async (style, seed) => {
+        try {
+            if (userData?.id) {
+                await updateUserAvatar(userData.id, style, seed)
+                const url = generateAvatarSvg(style, seed)
+                setAvatarUrl(url)
+                setUserData(prev => ({ ...prev, avatarStyle: style, avatarSeed: seed }))
+            }
+        } catch (error) {
+            console.error('Error saving avatar:', error)
+            alert('Error al guardar el avatar')
         }
     }
 
@@ -140,6 +167,18 @@ function Admin() {
                         </svg>
                         Puestos
                     </NavLink>
+
+                    {/* Link de Solicitudes - diferente según el usuario */}
+                    <NavLink
+                        to="/admin/solicitudes"
+                        className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                        onClick={() => setSidebarOpen(false)}
+                    >
+                        <svg className="sidebar-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        {user?.email === ADMIN_EMAIL ? 'Solicitudes' : 'Sugerencias'}
+                    </NavLink>
                 </nav>
 
                 <div className="sidebar-footer">
@@ -191,9 +230,25 @@ function Admin() {
                             <span className="user-greeting">¡Hola, {displayName}!</span>
                             <span className="user-role">{userData?.rol || 'Administrador'}</span>
                         </div>
-                        <div className="admin-user-avatar">
-                            {displayName.charAt(0).toUpperCase()}
-                        </div>
+                        <button
+                            className="admin-user-avatar-btn"
+                            onClick={() => setShowAvatarSelector(true)}
+                            title="Cambiar avatar"
+                        >
+                            {avatarUrl ? (
+                                <img src={avatarUrl} alt="Avatar" className="avatar-image" />
+                            ) : (
+                                <div className="avatar-initial">
+                                    {displayName.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                            <span className="avatar-edit-icon">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </span>
+                        </button>
                     </div>
                 </header>
 
@@ -204,12 +259,27 @@ function Admin() {
                         <Route path="candidatos" element={<Candidates />} />
                         <Route path="reclutadoras" element={<Recruiters />} />
                         <Route path="puestos" element={<Positions />} />
+                        <Route path="solicitudes" element={
+                            user?.email === ADMIN_EMAIL
+                                ? <RequestsManager />
+                                : <ImprovementRequests userEmail={user?.email} userName={displayName} />
+                        } />
                     </Routes>
                 </div>
             </main>
+
+            {/* Avatar Selector Modal */}
+            {showAvatarSelector && (
+                <AvatarSelector
+                    currentStyle={userData?.avatarStyle}
+                    currentSeed={userData?.avatarSeed}
+                    userName={displayName}
+                    onSelect={handleAvatarSelect}
+                    onClose={() => setShowAvatarSelector(false)}
+                />
+            )}
         </div>
     )
 }
 
 export default Admin
-
