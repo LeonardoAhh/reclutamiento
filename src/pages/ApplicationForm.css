@@ -1,0 +1,203 @@
+/* ========================================
+   APPLICATION FORM PAGE
+   ======================================== */
+
+.form-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-50) 100%);
+}
+
+/* === Header === */
+.form-header {
+    background: var(--primary-900);
+    padding: var(--spacing-4) 0;
+}
+
+.form-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    color: white;
+}
+
+.form-logo {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-accent);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+}
+
+.form-logo-text {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+}
+
+/* === Form Container === */
+.form-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: var(--spacing-10) var(--spacing-6);
+}
+
+.form-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+.form-card-header {
+    background: var(--gradient-hero);
+    padding: var(--spacing-8);
+    color: white;
+    text-align: center;
+}
+
+.form-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    margin-bottom: var(--spacing-2);
+}
+
+.form-subtitle {
+    font-size: var(--font-size-base);
+    opacity: 0.85;
+}
+
+/* === Selected Vacancy Banner === */
+.selected-vacancy-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4) var(--spacing-6);
+    background: rgba(16, 185, 129, 0.1);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.banner-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--accent-500);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.banner-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.banner-label {
+    font-size: var(--font-size-sm);
+    color: var(--neutral-600);
+}
+
+.banner-title {
+    font-size: var(--font-size-lg);
+    color: var(--neutral-900);
+}
+
+/* === Form === */
+.application-form {
+    padding: var(--spacing-8);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-5);
+}
+
+.form-actions {
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid var(--neutral-200);
+}
+
+.form-actions .btn {
+    width: 100%;
+}
+
+/* === Success State === */
+.success-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-12);
+    text-align: center;
+    box-shadow: var(--shadow-xl);
+}
+
+.success-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto var(--spacing-6);
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-500);
+}
+
+.success-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    color: var(--neutral-900);
+    margin-bottom: var(--spacing-4);
+}
+
+.success-message {
+    font-size: var(--font-size-lg);
+    color: var(--neutral-600);
+    line-height: 1.7;
+    max-width: 450px;
+    margin: 0 auto var(--spacing-8);
+}
+
+.success-actions {
+    display: flex;
+    gap: var(--spacing-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* === Responsive === */
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-card-header {
+        padding: var(--spacing-6);
+    }
+
+    .form-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .application-form {
+        padding: var(--spacing-6);
+    }
+
+    .success-actions {
+        flex-direction: column;
+    }
+
+    .success-actions .btn {
+        width: 100%;
+    }
+}

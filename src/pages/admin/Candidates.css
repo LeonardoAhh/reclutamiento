@@ -1,0 +1,173 @@
+/* ========================================
+   CANDIDATES PAGE STYLES
+   ======================================== */
+
+.candidates-page {
+    max-width: 1400px;
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--spacing-4);
+    align-items: center;
+}
+
+.filter-select {
+    min-width: 200px;
+}
+
+/* === Candidates Grid === */
+.candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: var(--spacing-6);
+}
+
+.candidate-card {
+    padding: var(--spacing-5);
+}
+
+.candidate-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+}
+
+.candidate-avatar {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-button);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: var(--font-size-xl);
+    flex-shrink: 0;
+}
+
+.candidate-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.candidate-name {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--neutral-900);
+    margin-bottom: var(--spacing-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.candidate-vacancy {
+    font-size: var(--font-size-sm);
+    color: var(--primary-600);
+    font-weight: 500;
+}
+
+/* === Details === */
+.candidate-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    padding: var(--spacing-4);
+    background: var(--neutral-50);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-4);
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    font-size: var(--font-size-sm);
+    color: var(--neutral-600);
+}
+
+.detail-row svg {
+    color: var(--neutral-400);
+    flex-shrink: 0;
+}
+
+.detail-row span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* === Extra Info === */
+.candidate-extra {
+    margin-bottom: var(--spacing-4);
+}
+
+.extra-section {
+    padding: var(--spacing-3);
+    background: var(--neutral-50);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-2);
+}
+
+.extra-section:last-child {
+    margin-bottom: 0;
+}
+
+.extra-section strong {
+    font-size: var(--font-size-xs);
+    color: var(--neutral-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: var(--spacing-1);
+}
+
+.extra-section p {
+    font-size: var(--font-size-sm);
+    color: var(--neutral-700);
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* === Actions === */
+.candidate-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: center;
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--neutral-200);
+}
+
+.status-select {
+    flex: 1;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .header-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .filter-select {
+        min-width: auto;
+    }
+
+    .candidates-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header-row {
+        flex-direction: column;
+        gap: var(--spacing-4);
+    }
+}

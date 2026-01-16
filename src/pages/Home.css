@@ -1,0 +1,347 @@
+/* ========================================
+   HOME PAGE - VACANCIES LISTING
+   ======================================== */
+
+.home-page {
+    min-height: 100vh;
+    background: var(--neutral-50);
+    display: flex;
+    flex-direction: column;
+}
+
+/* === Header === */
+.home-header {
+    background: var(--primary-900);
+    padding: var(--spacing-4) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+}
+
+.home-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.home-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    color: white;
+    text-decoration: none;
+}
+
+.home-logo {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-accent);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    color: white;
+}
+
+.home-logo.small {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-base);
+}
+
+.home-logo-text {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+}
+
+.home-nav-links {
+    display: flex;
+    gap: var(--spacing-4);
+}
+
+/* === Hero Section === */
+.home-hero {
+    background: var(--gradient-hero);
+    padding: var(--spacing-16) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+}
+
+.home-hero-content {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.home-title {
+    font-size: var(--font-size-4xl);
+    font-weight: 800;
+    margin-bottom: var(--spacing-4);
+}
+
+.home-title .text-accent {
+    background: linear-gradient(135deg, var(--accent-300) 0%, var(--accent-400) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.home-subtitle {
+    font-size: var(--font-size-lg);
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* === Filters === */
+.home-filters {
+    background: white;
+    padding: var(--spacing-4) 0;
+    border-bottom: 1px solid var(--neutral-200);
+    position: sticky;
+    top: 76px;
+    z-index: 50;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: var(--spacing-2);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-2);
+}
+
+.filter-tab {
+    padding: var(--spacing-2) var(--spacing-5);
+    background: var(--neutral-100);
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--neutral-600);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.filter-tab:hover {
+    background: var(--neutral-200);
+    color: var(--neutral-800);
+}
+
+.filter-tab.active {
+    background: var(--primary-500);
+    color: white;
+}
+
+/* === Content === */
+.home-content {
+    flex: 1;
+    padding: var(--spacing-10) 0;
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-16) 0;
+    color: var(--neutral-500);
+    gap: var(--spacing-4);
+}
+
+/* === Vacancies Grid === */
+.vacancies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--spacing-6);
+}
+
+.vacancy-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-6);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.vacancy-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.vacancy-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+}
+
+.vacancy-card:hover::before {
+    opacity: 1;
+}
+
+.vacancy-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-4);
+}
+
+.vacancy-badge {
+    display: inline-flex;
+    padding: var(--spacing-1) var(--spacing-3);
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-600);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.vacancy-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--neutral-100);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--neutral-500);
+}
+
+.vacancy-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--neutral-900);
+    margin-bottom: var(--spacing-3);
+    line-height: 1.3;
+}
+
+.vacancy-description {
+    color: var(--neutral-600);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-4);
+    flex: 1;
+}
+
+.vacancy-requirements {
+    padding: var(--spacing-3);
+    background: var(--neutral-50);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-4);
+}
+
+.vacancy-requirements h4 {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--neutral-700);
+    margin-bottom: var(--spacing-1);
+}
+
+.vacancy-requirements p {
+    font-size: var(--font-size-sm);
+    color: var(--neutral-600);
+    line-height: 1.5;
+}
+
+.vacancy-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--neutral-100);
+    margin-top: auto;
+}
+
+.vacancy-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.vacancy-location {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: var(--font-size-sm);
+    color: var(--neutral-500);
+}
+
+.vacancy-location svg {
+    opacity: 0.7;
+}
+
+/* === Footer === */
+.home-footer {
+    background: var(--primary-900);
+    padding: var(--spacing-6) 0;
+    color: white;
+}
+
+.home-footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    font-weight: 600;
+}
+
+.home-footer p {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .home-title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .vacancies-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vacancy-footer {
+        flex-direction: column;
+        gap: var(--spacing-4);
+    }
+
+    .vacancy-footer .btn {
+        width: 100%;
+    }
+
+    .home-footer-content {
+        flex-direction: column;
+        gap: var(--spacing-3);
+        text-align: center;
+    }
+}

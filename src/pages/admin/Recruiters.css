@@ -1,0 +1,133 @@
+/* ========================================
+   RECRUITERS PAGE STYLES
+   ======================================== */
+
+.recruiters-page {
+    max-width: 1200px;
+}
+
+/* === Recruiters Grid === */
+.recruiters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-6);
+}
+
+.recruiter-card {
+    padding: var(--spacing-6);
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.recruiter-card:hover {
+    transform: translateY(-4px);
+}
+
+.recruiter-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-4);
+    background: linear-gradient(135deg, var(--primary-100) 0%, var(--accent-200) 100%);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-600);
+}
+
+.recruiter-name {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--neutral-900);
+    margin-bottom: var(--spacing-1);
+}
+
+.recruiter-department {
+    display: inline-block;
+    font-size: var(--font-size-sm);
+    color: var(--neutral-500);
+    background: var(--neutral-100);
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--spacing-4);
+}
+
+/* === Contact Info === */
+.recruiter-contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-5);
+    padding: var(--spacing-4);
+    background: var(--neutral-50);
+    border-radius: var(--radius-lg);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+    color: var(--neutral-600);
+    transition: color var(--transition-fast);
+    text-decoration: none;
+}
+
+.contact-item:hover {
+    color: var(--primary-500);
+}
+
+.contact-item svg {
+    color: var(--neutral-400);
+    flex-shrink: 0;
+}
+
+.contact-item .extension {
+    color: var(--neutral-400);
+    font-size: var(--font-size-xs);
+}
+
+/* === Actions === */
+.recruiter-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: center;
+}
+
+.btn-danger-outline {
+    border-color: var(--error);
+    color: var(--error);
+}
+
+.btn-danger-outline:hover {
+    background: var(--error);
+    color: white;
+}
+
+/* === Form Row === */
+.form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-4);
+}
+
+/* === Responsive === */
+@media (max-width: 640px) {
+    .recruiters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .recruiter-actions {
+        flex-direction: column;
+    }
+
+    .recruiter-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
