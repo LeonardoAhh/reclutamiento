@@ -377,3 +377,25 @@ export const importPositions = async (positionsArray) => {
         throw error;
     }
 };
+
+// ========================================
+// USER SERVICE
+// Para obtener datos del usuario logueado
+// ========================================
+
+export const getUserByEmail = async (email) => {
+    try {
+        const usersCollection = collection(db, 'users');
+        const q = query(usersCollection, where('email', '==', email));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+            const doc = snapshot.docs[0];
+            return { id: doc.id, ...doc.data() };
+        }
+        return null;
+    } catch (error) {
+        console.error('Error getting user:', error);
+        return null;
+    }
+};
+

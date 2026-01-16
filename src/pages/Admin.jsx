@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { auth } from '../firebase/config'
+import { getUserByEmail } from '../services/firebaseService'
+import { MOTIVATIONAL_MESSAGES } from '../data/motivationalMessages'
 import VacancyManager from './admin/VacancyManager'
 import Candidates from './admin/Candidates'
 import Recruiters from './admin/Recruiters'
@@ -11,15 +13,40 @@ import './Admin.css'
 function Admin() {
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
+    const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(true)
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [currentMessage, setCurrentMessage] = useState('')
+    const [messageIndex, setMessageIndex] = useState(0)
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser)
+            if (currentUser?.email) {
+                const userInfo = await getUserByEmail(currentUser.email)
+                setUserData(userInfo)
+            }
             setLoading(false)
         })
         return () => unsubscribe()
+    }, [])
+
+    // Cambiar mensaje cada 20 segundos
+    useEffect(() => {
+        // Establecer mensaje inicial aleatorio
+        const randomIndex = Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)
+        setMessageIndex(randomIndex)
+        setCurrentMessage(MOTIVATIONAL_MESSAGES[randomIndex])
+
+        const interval = setInterval(() => {
+            setMessageIndex(prev => {
+                const newIndex = (prev + 1) % MOTIVATIONAL_MESSAGES.length
+                setCurrentMessage(MOTIVATIONAL_MESSAGES[newIndex])
+                return newIndex
+            })
+        }, 20000) // 20 segundos
+
+        return () => clearInterval(interval)
     }, [])
 
     const handleLogout = async () => {
@@ -30,6 +57,9 @@ function Admin() {
             console.error('Logout error:', error)
         }
     }
+
+    // Obtener nombre para mostrar
+    const displayName = userData?.name || user?.email?.split('@')[0] || 'Usuario'
 
     if (loading) {
         return (
@@ -150,10 +180,19 @@ function Admin() {
                             <line x1="3" y1="18" x2="21" y2="18"></line>
                         </svg>
                     </button>
+
+                    {/* Mensaje Motivacional */}
+                    <div className="motivational-section">
+                        <p className="motivational-message">{currentMessage}</p>
+                    </div>
+
                     <div className="admin-header-user">
-                        <span className="Administrador">Administrador</span>
+                        <div className="user-info">
+                            <span className="user-greeting">¡Hola, {displayName}!</span>
+                            <span className="user-role">{userData?.rol || 'Administrador'}</span>
+                        </div>
                         <div className="admin-user-avatar">
-                            {user.email?.charAt(0).toUpperCase()}
+                            {displayName.charAt(0).toUpperCase()}
                         </div>
                     </div>
                 </header>
@@ -173,3 +212,4 @@ function Admin() {
 }
 
 export default Admin
+

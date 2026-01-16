@@ -194,22 +194,76 @@
     gap: var(--spacing-3);
 }
 
-.admin-user-email {
-    font-size: var(--font-size-sm);
-    color: var(--neutral-600);
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.user-greeting {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--neutral-900);
+}
+
+.user-role {
+    font-size: var(--font-size-xs);
+    color: var(--neutral-500);
+    text-transform: capitalize;
 }
 
 .admin-user-avatar {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: var(--gradient-button);
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    box-shadow: var(--shadow-md);
+}
+
+/* === Motivational Message === */
+.motivational-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--spacing-6);
+    min-width: 0;
+}
+
+.motivational-message {
     font-size: var(--font-size-base);
+    color: var(--primary-700);
+    font-weight: 500;
+    text-align: center;
+    margin: 0;
+    padding: var(--spacing-2) var(--spacing-4);
+    background: linear-gradient(135deg, rgba(180, 211, 55, 0.1) 0%, rgba(180, 211, 55, 0.05) 100%);
+    border-radius: var(--radius-lg);
+    border-left: 3px solid var(--accent-500);
+    animation: fadeInMessage 0.5s ease-out;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+@keyframes fadeInMessage {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .admin-content {
@@ -259,7 +313,17 @@
         padding: var(--spacing-3) var(--spacing-4);
     }
 
-    .admin-user-email {
+    .motivational-section {
         display: none;
+    }
+
+    .user-info {
+        display: none;
+    }
+
+    .admin-user-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: var(--font-size-base);
     }
 }
