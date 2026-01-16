@@ -6,8 +6,66 @@ import {
     deletePosition,
     importPositions
 } from '../../services/firebaseService'
-import positionsData from '../../data/data.json'
 import './Positions.css'
+
+// Los datos de puestos predefinidos
+const POSITIONS_DATA = [
+    { "position": "ALMACENISTA DE MATERIA PRIMA", "department": "ALMACÉN" },
+    { "position": "ANALISTA DE CAPACITACIÓN", "department": "RECURSOS HUMANOS" },
+    { "position": "ANALISTA DE RECLUTAMIENTO Y SELECCIÓN", "department": "RECURSOS HUMANOS" },
+    { "position": "ANALISTA DE RECURSOS HUMANOS", "department": "RECURSOS HUMANOS" },
+    { "position": "ANALISTA DE SEGURIDAD E HIGIENE", "department": "RECURSOS HUMANOS" },
+    { "position": "ASISTENTE DE PRODUCCIÓN", "department": "PRODUCCIÓN" },
+    { "position": "ASISTENTE DE RECURSOS HUMANOS", "department": "RECURSOS HUMANOS" },
+    { "position": "AUXILIAR ADMINISTRATIVO DE ALMACÉN", "department": "ALMACÉN" },
+    { "position": "AUXILIAR ADMINISTRATIVO DE MANTENIMIENTO", "department": "MANTENIMIENTO" },
+    { "position": "AUXILIAR ADMINISTRATIVO DE TALLER DE MOLDES", "department": "TALLER DE MOLDES" },
+    { "position": "AUXILIAR DE ALMACÉN", "department": "ALMACÉN" },
+    { "position": "AUXILIAR DE CALIDAD", "department": "CALIDAD" },
+    { "position": "AUXILIAR DE LIMPIEZA", "department": "LIMPIEZA" },
+    { "position": "AUXILIAR DE MANTENIMIENTO", "department": "MANTENIMIENTO" },
+    { "position": "AUXILIAR DE METROLOGÍA", "department": "METRÓLOGÍA" },
+    { "position": "AUXILIAR DE PROYECTOS", "department": "PROYECTOS" },
+    { "position": "AUXILIAR DEL SGC", "department": "SGC" },
+    { "position": "AUXILIAR PROGRAMADOR", "department": "SISTEMAS" },
+    { "position": "CHOFER", "department": "ALMACÉN" },
+    { "position": "COORDINADOR DE RECLUTAMIENTO Y SELECCIÓN", "department": "RECURSOS HUMANOS" },
+    { "position": "COORDINADOR DE RPS", "department": "SISTEMAS" },
+    { "position": "COORDINADOR DEL SGC", "department": "SGC" },
+    { "position": "GERENTE DE CALIDAD", "department": "CALIDAD" },
+    { "position": "GERENTE DE PLANTA", "department": "GERENCIA" },
+    { "position": "GERENTE DE PRODUCCIÓN", "department": "PRODUCCIÓN" },
+    { "position": "GERENTE DE PROYECTOS", "department": "PROYECTOS" },
+    { "position": "INGENIERO DE CALIDAD", "department": "CALIDAD" },
+    { "position": "INGENIERO DE PROCESO", "department": "PRODUCCIÓN" },
+    { "position": "INGENIERO DE PROYECTOS", "department": "PROYECTOS" },
+    { "position": "INSPECTOR DE CALIDAD", "department": "CALIDAD" },
+    { "position": "INSPECTOR RECIBO", "department": "CALIDAD" },
+    { "position": "JEFE DE ALMACÉN", "department": "ALMACÉN" },
+    { "position": "JEFE DE LOGÍSTICA", "department": "LOGÍSTICA" },
+    { "position": "JEFE DE MANTENIMIENTO", "department": "MANTENIMIENTO" },
+    { "position": "JEFE DE METROLOGÍA", "department": "METRÓLOGÍA" },
+    { "position": "JEFE DE PROCESO", "department": "PRODUCCIÓN" },
+    { "position": "JEFE DE PRODUCCIÓN", "department": "PRODUCCIÓN" },
+    { "position": "JEFE DE RECURSOS HUMANOS", "department": "RECURSOS HUMANOS" },
+    { "position": "LÍDER DE COTIZACIONES", "department": "PROYECTOS" },
+    { "position": "LÍDER DE PROYECTOS", "department": "PROYECTOS" },
+    { "position": "METRÓLOGO", "department": "METRÓLOGÍA" },
+    { "position": "MONTADOR DE MOLDES", "department": "PRODUCCIÓN MONTAJE" },
+    { "position": "OPERADOR DE ACABADOS - GP12", "department": "CALIDAD" },
+    { "position": "OPERADOR DE MÁQUINA A", "department": "PRODUCCIÓN" },
+    { "position": "PLANEADOR DE PRODUCCIÓN", "department": "PRODUCCIÓN" },
+    { "position": "RESIDENTE DE CALIDAD", "department": "CALIDAD" },
+    { "position": "SUPERVISOR DE ACABADOS - GP12", "department": "CALIDAD" },
+    { "position": "SUPERVISOR DE LOGÍSTICA", "department": "LOGÍSTICA" },
+    { "position": "SUPERVISOR DE METROLOGÍA", "department": "METRÓLOGÍA" },
+    { "position": "SUPERVISOR DE MONTAJE", "department": "PRODUCCIÓN MONTAJE" },
+    { "position": "SUPERVISOR DE PRODUCCIÓN", "department": "PRODUCCIÓN" },
+    { "position": "JEFE DE TALLER DE MOLDES", "department": "TALLER DE MOLDES" },
+    { "position": "TÉCNICO DE MANTENIMIENTO", "department": "MANTENIMIENTO" },
+    { "position": "TÉCNICO DE MANTENIMIENTO DE EDIFICIOS", "department": "MANTENIMIENTO" },
+    { "position": "TÉCNICO DE MOLDES", "department": "TALLER DE MOLDES" }
+]
 
 function Positions() {
     const [positions, setPositions] = useState([])
@@ -93,16 +151,16 @@ function Positions() {
 
     const handleImport = async () => {
         if (positions.length > 0) {
-            if (!window.confirm('Ya existen puestos. ¿Deseas importar los datos del archivo JSON de todos modos?')) {
+            if (!window.confirm('Ya existen puestos. ¿Deseas importar los datos predefinidos de todos modos?')) {
                 return
             }
         }
 
         setImporting(true)
         try {
-            await importPositions(positionsData)
+            await importPositions(POSITIONS_DATA)
             loadPositions()
-            alert(`Se importaron ${positionsData.length} puestos correctamente`)
+            alert(`Se importaron ${POSITIONS_DATA.length} puestos correctamente`)
         } catch (error) {
             console.error('Error importing positions:', error)
             alert('Error al importar los puestos')
