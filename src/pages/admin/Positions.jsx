@@ -272,10 +272,10 @@ function Positions() {
                         <tbody>
                             {filteredPositions.map(position => (
                                 <tr key={position.id}>
-                                    <td>
+                                    <td data-label="Puesto">
                                         <strong>{position.position}</strong>
                                     </td>
-                                    <td>
+                                    <td data-label="Departamento">
                                         <span className="department-badge">{position.department}</span>
                                     </td>
                                     <td>

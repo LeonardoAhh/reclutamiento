@@ -152,22 +152,129 @@
 
 /* === Responsive === */
 @media (max-width: 768px) {
-    .header-actions {
+    .candidates-page {
+        max-width: 100%;
+    }
+
+    .page-header-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px;
+    }
+
+    .candidates-page .header-actions {
         flex-direction: column;
         align-items: stretch;
         width: 100%;
+        gap: 12px;
+    }
+
+    .candidates-page .header-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 
     .filter-select {
         min-width: auto;
+        width: 100%;
     }
 
     .candidates-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 16px;
     }
 
-    .page-header-row {
-        flex-direction: column;
-        gap: var(--spacing-4);
+    .candidate-card {
+        padding: 16px;
+    }
+
+    .candidate-header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .candidate-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+
+    .candidate-info {
+        flex: 1;
+        min-width: calc(100% - 120px);
+    }
+
+    .candidate-name {
+        font-size: 16px;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+
+    .candidate-vacancy {
+        font-size: 13px;
+    }
+
+    .candidate-header .badge {
+        order: 3;
+        margin-left: auto;
+    }
+
+    /* Details */
+    .candidate-details {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .detail-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .detail-row span {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+    }
+
+    /* Extra sections */
+    .extra-section {
+        padding: 12px;
+    }
+
+    .extra-section p {
+        -webkit-line-clamp: 4;
+    }
+
+    /* Actions */
+    .candidate-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 16px;
+    }
+
+    .status-select {
+        flex: 1;
+        min-width: 0;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .candidate-actions .btn-icon {
+        width: 44px !important;
+        height: 44px !important;
+        flex-shrink: 0;
+    }
+
+    /* Empty state */
+    .candidates-page .empty-state {
+        padding: 32px 16px;
+    }
+
+    .candidates-page .empty-state-icon {
+        width: 64px;
+        height: 64px;
     }
 }
