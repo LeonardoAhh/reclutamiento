@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { getVacancies, getVacancy, createCandidate } from '../services/firebaseService'
+import { getVacancies, getVacancy, createCandidate, getQuestionsByVacancy } from '../services/firebaseService'
 import './ApplicationForm.css'
 
 function ApplicationForm() {
@@ -8,6 +8,7 @@ function ApplicationForm() {
     const navigate = useNavigate()
     const [vacancies, setVacancies] = useState([])
     const [selectedVacancy, setSelectedVacancy] = useState(null)
+    const [questions, setQuestions] = useState([])
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
     const [submitted, setSubmitted] = useState(false)
@@ -18,9 +19,11 @@ function ApplicationForm() {
         email: '',
         phone: '',
         vacancyId: vacancyId || '',
-        experience: '',
+        zona: '',
         message: ''
     })
+
+    const [answers, setAnswers] = useState({})
 
     useEffect(() => {
         loadData()
@@ -35,8 +38,22 @@ function ApplicationForm() {
             const vacancy = await getVacancy(vacancyId)
             setSelectedVacancy(vacancy)
             setFormData(prev => ({ ...prev, vacancyId }))
+            // Load questions for this vacancy
+            const vacancyQuestions = await getQuestionsByVacancy(vacancyId)
+            setQuestions(vacancyQuestions)
         }
         setLoading(false)
+    }
+
+    const loadQuestionsForVacancy = async (id) => {
+        if (id) {
+            const vacancyQuestions = await getQuestionsByVacancy(id)
+            setQuestions(vacancyQuestions)
+            setAnswers({}) // Reset answers when vacancy changes
+        } else {
+            setQuestions([])
+            setAnswers({})
+        }
     }
 
     const handleChange = (e) => {
@@ -52,6 +69,15 @@ function ApplicationForm() {
         if (name === 'vacancyId') {
             const vacancy = vacancies.find(v => v.id === value)
             setSelectedVacancy(vacancy)
+            loadQuestionsForVacancy(value)
+        }
+    }
+
+    const handleAnswerChange = (questionId, value) => {
+        setAnswers(prev => ({ ...prev, [questionId]: value }))
+        // Clear error
+        if (errors[`question_${questionId}`]) {
+            setErrors(prev => ({ ...prev, [`question_${questionId}`]: '' }))
         }
     }
 
@@ -78,6 +104,13 @@ function ApplicationForm() {
             newErrors.vacancyId = 'Selecciona una vacante'
         }
 
+        // Validate required questions
+        questions.forEach(question => {
+            if (question.required && !answers[question.id]?.trim()) {
+                newErrors[`question_${question.id}`] = 'Esta pregunta es obligatoria'
+            }
+        })
+
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
     }
@@ -90,9 +123,18 @@ function ApplicationForm() {
         setSubmitting(true)
         try {
             const vacancyTitle = selectedVacancy?.title || ''
+
+            // Prepare answers with question text for easy reading
+            const formattedAnswers = questions.map(q => ({
+                questionId: q.id,
+                questionText: q.text,
+                answer: answers[q.id] || ''
+            }))
+
             await createCandidate({
                 ...formData,
-                vacancyTitle
+                vacancyTitle,
+                answers: formattedAnswers
             })
             setSubmitted(true)
         } catch (error) {
@@ -100,6 +142,83 @@ function ApplicationForm() {
             alert('Hubo un error al enviar tu postulación. Por favor intenta de nuevo.')
         } finally {
             setSubmitting(false)
+        }
+    }
+
+    const renderQuestionInput = (question) => {
+        const errorKey = `question_${question.id}`
+        const hasError = !!errors[errorKey]
+
+        switch (question.type) {
+            case 'textarea':
+                return (
+                    <textarea
+                        value={answers[question.id] || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        className={`form-input ${hasError ? 'form-input-error' : ''}`}
+                        placeholder="Escribe tu respuesta..."
+                        rows="3"
+                    />
+                )
+            case 'number':
+                return (
+                    <input
+                        type="number"
+                        value={answers[question.id] || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        className={`form-input ${hasError ? 'form-input-error' : ''}`}
+                        placeholder="Ingresa un número"
+                    />
+                )
+            case 'date':
+                return (
+                    <input
+                        type="date"
+                        value={answers[question.id] || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        className={`form-input ${hasError ? 'form-input-error' : ''}`}
+                    />
+                )
+            case 'select':
+                return (
+                    <select
+                        value={answers[question.id] || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        className={`form-input form-select ${hasError ? 'form-input-error' : ''}`}
+                    >
+                        <option value="">Selecciona una opción</option>
+                        {question.options?.map((opt, idx) => (
+                            <option key={idx} value={opt}>{opt}</option>
+                        ))}
+                    </select>
+                )
+            case 'radio':
+                return (
+                    <div className="radio-group">
+                        {question.options?.map((opt, idx) => (
+                            <label key={idx} className="radio-label">
+                                <input
+                                    type="radio"
+                                    name={`question_${question.id}`}
+                                    value={opt}
+                                    checked={answers[question.id] === opt}
+                                    onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                                />
+                                <span>{opt}</span>
+                            </label>
+                        ))}
+                    </div>
+                )
+            default: // text
+                return (
+                    <input
+                        type="text"
+                        value={answers[question.id] || ''}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        className={`form-input ${hasError ? 'form-input-error' : ''}`}
+                        placeholder="Escribe tu respuesta..."
+                    />
+                )
         }
     }
 
@@ -261,20 +380,48 @@ function ApplicationForm() {
                         )}
 
                         <div className="form-group">
-                            <label className="form-label" htmlFor="experience">
-                                Experiencia Laboral
+                            <label className="form-label" htmlFor="zona">
+                                Zona donde vives
                             </label>
-                            <textarea
-                                id="experience"
-                                name="experience"
-                                value={formData.experience}
+                            <input
+                                type="text"
+                                id="zona"
+                                name="zona"
+                                value={formData.zona}
                                 onChange={handleChange}
                                 className="form-input"
-                                placeholder="Describe brevemente tu experiencia laboral relevante..."
-                                rows="4"
-                            ></textarea>
+                                placeholder="Ej: Col. Centro, Querétaro"
+                            />
                         </div>
 
+                        {/* Dynamic Questions Section */}
+                        {questions.length > 0 && (
+                            <div className="dynamic-questions-section">
+                                <h3 className="questions-section-title">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    Preguntas Adicionales
+                                </h3>
+
+                                {questions.map((question, index) => (
+                                    <div key={question.id} className="form-group question-group">
+                                        <label className="form-label">
+                                            {index + 1}. {question.text}
+                                            {question.required && <span className="required-mark"> *</span>}
+                                        </label>
+                                        {renderQuestionInput(question)}
+                                        {errors[`question_${question.id}`] && (
+                                            <span className="form-error">{errors[`question_${question.id}`]}</span>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Motivation Question - After dynamic questions */}
                         <div className="form-group">
                             <label className="form-label" htmlFor="message">
                                 ¿Por qué te gustaría trabajar con nosotros?

@@ -4,21 +4,26 @@ import {
     createVacancy,
     updateVacancy,
     deleteVacancy,
-    toggleVacancyStatus
+    toggleVacancyStatus,
+    getPositions
 } from '../../services/firebaseService'
+import QuestionsManager from './QuestionsManager'
 import './VacancyManager.css'
 
 function VacancyManager() {
     const [vacancies, setVacancies] = useState([])
+    const [positions, setPositions] = useState([])
     const [loading, setLoading] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [editingVacancy, setEditingVacancy] = useState(null)
+    const [questionsVacancy, setQuestionsVacancy] = useState(null)
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         requirements: '',
         department: '',
-        location: ''
+        location: '',
+        salary: ''
     })
 
     useEffect(() => {
@@ -27,8 +32,12 @@ function VacancyManager() {
 
     const loadVacancies = async () => {
         setLoading(true)
-        const data = await getVacancies()
-        setVacancies(data)
+        const [vacanciesData, positionsData] = await Promise.all([
+            getVacancies(),
+            getPositions()
+        ])
+        setVacancies(vacanciesData)
+        setPositions(positionsData)
         setLoading(false)
     }
 
@@ -38,7 +47,8 @@ function VacancyManager() {
             description: '',
             requirements: '',
             department: '',
-            location: ''
+            location: '',
+            salary: ''
         })
         setEditingVacancy(null)
     }
@@ -51,7 +61,8 @@ function VacancyManager() {
                 description: vacancy.description || '',
                 requirements: vacancy.requirements || '',
                 department: vacancy.department || '',
-                location: vacancy.location || ''
+                location: vacancy.location || '',
+                salary: vacancy.salary || ''
             })
         } else {
             resetForm()
@@ -201,6 +212,17 @@ function VacancyManager() {
                                                 </svg>
                                             </button>
                                             <button
+                                                onClick={() => setQuestionsVacancy(vacancy)}
+                                                className="btn btn-icon btn-sm btn-questions"
+                                                title="Gestionar Preguntas"
+                                            >
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                                </svg>
+                                            </button>
+                                            <button
                                                 onClick={() => handleDelete(vacancy)}
                                                 className="btn btn-icon btn-sm btn-danger"
                                                 title="Eliminar"
@@ -238,16 +260,43 @@ function VacancyManager() {
                         <form onSubmit={handleSubmit}>
                             <div className="modal-body">
                                 <div className="form-group">
-                                    <label className="form-label">Título de la Vacante *</label>
-                                    <input
-                                        type="text"
-                                        name="title"
-                                        value={formData.title}
-                                        onChange={handleChange}
-                                        className="form-input"
-                                        placeholder="Ej: Operador de Inyección"
-                                        required
-                                    />
+                                    <label className="form-label">Puesto a Contratar *</label>
+                                    {positions.length > 0 ? (
+                                        <select
+                                            name="title"
+                                            value={formData.title}
+                                            onChange={(e) => {
+                                                const selectedPos = positions.find(p => p.position === e.target.value)
+                                                setFormData(prev => ({
+                                                    ...prev,
+                                                    title: e.target.value,
+                                                    department: selectedPos?.department || prev.department
+                                                }))
+                                            }}
+                                            className="form-input form-select"
+                                            required
+                                        >
+                                            <option value="">Selecciona un puesto</option>
+                                            {positions.map(pos => (
+                                                <option key={pos.id} value={pos.position}>
+                                                    {pos.position} - {pos.department}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            value={formData.title}
+                                            onChange={handleChange}
+                                            className="form-input"
+                                            placeholder="Ej: Operador de Inyección"
+                                            required
+                                        />
+                                    )}
+                                    {positions.length === 0 && (
+                                        <small className="form-help">Configura el catálogo de puestos para ver opciones</small>
+                                    )}
                                 </div>
 
                                 <div className="form-row">
@@ -298,7 +347,21 @@ function VacancyManager() {
                                         rows="3"
                                     ></textarea>
                                 </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Sueldo Ofrecido</label>
+                                    <input
+                                        type="text"
+                                        name="salary"
+                                        value={formData.salary}
+                                        onChange={handleChange}
+                                        className="form-input"
+                                        placeholder="Ej: $8,000 - $10,000 MXN mensuales"
+                                    />
+                                </div>
                             </div>
+
+
 
                             <div className="modal-footer">
                                 <button type="button" onClick={closeModal} className="btn btn-outline">
@@ -311,6 +374,14 @@ function VacancyManager() {
                         </form>
                     </div>
                 </div>
+            )}
+
+            {/* Questions Manager Modal */}
+            {questionsVacancy && (
+                <QuestionsManager
+                    vacancy={questionsVacancy}
+                    onClose={() => setQuestionsVacancy(null)}
+                />
             )}
         </div>
     )

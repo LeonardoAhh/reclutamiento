@@ -30,7 +30,7 @@ function Landing() {
                                 onClick={() => navigate('/login')}
                                 className="btn btn-secondary btn-sm"
                             >
-                                Acceso Admin
+                                🚫
                             </button>
                         </div>
                     </div>

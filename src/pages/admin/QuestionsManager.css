@@ -1,0 +1,205 @@
+/* ========================================
+   QUESTIONS MANAGER STYLES
+   ======================================== */
+
+.questions-modal {
+    max-width: 650px;
+    max-height: 85vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.questions-modal .modal-body {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--neutral-500);
+    margin-top: var(--spacing-1);
+}
+
+.add-question-btn {
+    width: 100%;
+    margin-bottom: var(--spacing-4);
+}
+
+/* Question Form */
+.question-form-card {
+    background: var(--neutral-50);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-5);
+    margin-bottom: var(--spacing-4);
+}
+
+.question-form-card h4 {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--neutral-800);
+    margin-bottom: var(--spacing-4);
+}
+
+.question-form-card .form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-4);
+    align-items: end;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--neutral-700);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-500);
+}
+
+.question-form-card .form-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: flex-end;
+    margin-top: var(--spacing-4);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--neutral-200);
+}
+
+/* Empty State */
+.empty-questions {
+    text-align: center;
+    padding: var(--spacing-8) var(--spacing-4);
+    color: var(--neutral-500);
+}
+
+.empty-questions svg {
+    margin-bottom: var(--spacing-3);
+    opacity: 0.5;
+}
+
+.empty-questions p {
+    font-weight: 500;
+    color: var(--neutral-600);
+    margin-bottom: var(--spacing-1);
+}
+
+.empty-questions span {
+    font-size: var(--font-size-sm);
+}
+
+/* Questions List */
+.questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.question-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+    background: white;
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+}
+
+.question-item:hover {
+    border-color: var(--neutral-300);
+    box-shadow: var(--shadow-sm);
+}
+
+.question-order {
+    width: 28px;
+    height: 28px;
+    background: var(--primary-100);
+    color: var(--primary-600);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.question-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.question-text {
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    color: var(--neutral-800);
+    margin-bottom: var(--spacing-1);
+    line-height: 1.4;
+}
+
+.required-badge {
+    color: var(--error);
+    margin-left: var(--spacing-1);
+}
+
+.question-type {
+    display: inline-block;
+    font-size: var(--font-size-xs);
+    color: var(--neutral-500);
+    background: var(--neutral-100);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+}
+
+.question-options {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--neutral-500);
+    margin-top: var(--spacing-1);
+}
+
+.question-actions {
+    display: flex;
+    gap: var(--spacing-1);
+    flex-shrink: 0;
+}
+
+/* Loading */
+.loading-state.small {
+    padding: var(--spacing-8) 0;
+}
+
+.loading-state.small .spinner {
+    width: 30px;
+    height: 30px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .question-form-card .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .question-item {
+        flex-wrap: wrap;
+    }
+
+    .question-actions {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--spacing-2);
+    }
+}

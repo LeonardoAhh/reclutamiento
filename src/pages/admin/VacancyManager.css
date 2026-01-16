@@ -67,6 +67,16 @@
     color: var(--error);
 }
 
+.btn-icon.btn-questions {
+    background: var(--primary-50);
+    color: var(--primary-500);
+}
+
+.btn-icon.btn-questions:hover {
+    background: var(--primary-100);
+    color: var(--primary-600);
+}
+
 /* === Form Row === */
 .form-row {
     display: grid;

@@ -1,0 +1,69 @@
+/* ========================================
+   POSITIONS PAGE STYLES
+   ======================================== */
+
+.positions-page {
+    max-width: 1000px;
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    flex-wrap: wrap;
+}
+
+/* Filters */
+.positions-filters {
+    margin-bottom: var(--spacing-5);
+}
+
+.filter-select {
+    max-width: 300px;
+}
+
+/* Table */
+.positions-table-container {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.department-badge {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-3);
+    background: var(--primary-50);
+    color: var(--primary-600);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+/* Empty State */
+.empty-state-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    justify-content: center;
+    margin-top: var(--spacing-4);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .header-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .header-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .filter-select {
+        max-width: 100%;
+    }
+
+    .empty-state-actions {
+        flex-direction: column;
+    }
+}

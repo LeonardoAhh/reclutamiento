@@ -33,12 +33,12 @@ function Home() {
                 <div className="container">
                     <nav className="home-nav">
                         <Link to="/" className="home-brand">
-                            <div className="home-logo">I</div>
-                            <span className="home-logo-text">Viñoplastic Querétaro</span>
+                            <div className="home-logo">V</div>
+                            <span className="home-logo-text">Viñoplastic</span>
                         </Link>
                         <div className="home-nav-links">
-                            <Link to="/login" className="btn btn-outline btn-sm">
-                                Acceso Admin
+                            <Link to="/" className="btn btn-outline btn-sm">
+                                Inicio
                             </Link>
                         </div>
                     </nav>
@@ -141,6 +141,15 @@ function Home() {
                                                         <circle cx="12" cy="10" r="3"></circle>
                                                     </svg>
                                                     {vacancy.location}
+                                                </span>
+                                            )}
+                                            {vacancy.salary && (
+                                                <span className="vacancy-salary">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                                    </svg>
+                                                    {vacancy.salary}
                                                 </span>
                                             )}
                                         </div>

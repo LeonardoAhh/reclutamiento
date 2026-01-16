@@ -229,3 +229,151 @@ export const deleteRecruiter = async (id) => {
         throw error;
     }
 };
+
+// ========================================
+// QUESTIONS SERVICE
+// Preguntas personalizadas por vacante
+// ========================================
+
+const questionsCollection = collection(db, 'questions');
+
+export const getQuestionsByVacancy = async (vacancyId) => {
+    try {
+        const q = query(questionsCollection, where('vacancyId', '==', vacancyId));
+        const snapshot = await getDocs(q);
+        const questions = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        // Sort by order on client side
+        questions.sort((a, b) => (a.order || 0) - (b.order || 0));
+        return questions;
+    } catch (error) {
+        console.error('Error getting questions:', error);
+        return [];
+    }
+};
+
+export const createQuestion = async (questionData) => {
+    try {
+        const docRef = await addDoc(questionsCollection, {
+            ...questionData,
+            createdAt: serverTimestamp()
+        });
+        return { id: docRef.id, ...questionData };
+    } catch (error) {
+        console.error('Error creating question:', error);
+        throw error;
+    }
+};
+
+export const updateQuestion = async (id, questionData) => {
+    try {
+        const docRef = doc(db, 'questions', id);
+        await updateDoc(docRef, questionData);
+        return { id, ...questionData };
+    } catch (error) {
+        console.error('Error updating question:', error);
+        throw error;
+    }
+};
+
+export const deleteQuestion = async (id) => {
+    try {
+        const docRef = doc(db, 'questions', id);
+        await deleteDoc(docRef);
+        return true;
+    } catch (error) {
+        console.error('Error deleting question:', error);
+        throw error;
+    }
+};
+
+// Delete all questions for a vacancy (when vacancy is deleted)
+export const deleteQuestionsByVacancy = async (vacancyId) => {
+    try {
+        const questions = await getQuestionsByVacancy(vacancyId);
+        for (const question of questions) {
+            await deleteQuestion(question.id);
+        }
+        return true;
+    } catch (error) {
+        console.error('Error deleting questions by vacancy:', error);
+        throw error;
+    }
+};
+
+// ========================================
+// POSITIONS SERVICE
+// Catálogo de puestos disponibles
+// ========================================
+
+const positionsCollection = collection(db, 'positions');
+
+export const getPositions = async () => {
+    try {
+        const q = query(positionsCollection, orderBy('position', 'asc'));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+    } catch (error) {
+        console.error('Error getting positions:', error);
+        return [];
+    }
+};
+
+export const createPosition = async (positionData) => {
+    try {
+        const docRef = await addDoc(positionsCollection, {
+            ...positionData,
+            createdAt: serverTimestamp()
+        });
+        return { id: docRef.id, ...positionData };
+    } catch (error) {
+        console.error('Error creating position:', error);
+        throw error;
+    }
+};
+
+export const updatePosition = async (id, positionData) => {
+    try {
+        const docRef = doc(db, 'positions', id);
+        await updateDoc(docRef, positionData);
+        return { id, ...positionData };
+    } catch (error) {
+        console.error('Error updating position:', error);
+        throw error;
+    }
+};
+
+export const deletePosition = async (id) => {
+    try {
+        const docRef = doc(db, 'positions', id);
+        await deleteDoc(docRef);
+        return true;
+    } catch (error) {
+        console.error('Error deleting position:', error);
+        throw error;
+    }
+};
+
+// Bulk import positions from JSON
+export const importPositions = async (positionsArray) => {
+    try {
+        const results = [];
+        for (const pos of positionsArray) {
+            const docRef = await addDoc(positionsCollection, {
+                position: pos.position,
+                department: pos.department,
+                createdAt: serverTimestamp()
+            });
+            results.push({ id: docRef.id, ...pos });
+        }
+        return results;
+    } catch (error) {
+        console.error('Error importing positions:', error);
+        throw error;
+    }
+};

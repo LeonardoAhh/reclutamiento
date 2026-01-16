@@ -175,6 +175,70 @@
     flex-wrap: wrap;
 }
 
+/* === Dynamic Questions Section === */
+.dynamic-questions-section {
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-6);
+    border-top: 2px solid var(--neutral-100);
+}
+
+.questions-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--primary-700);
+    margin-bottom: var(--spacing-5);
+}
+
+.questions-section-title svg {
+    color: var(--primary-500);
+}
+
+.question-group {
+    padding: var(--spacing-4);
+    background: var(--neutral-50);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--neutral-200);
+}
+
+.required-mark {
+    color: var(--error);
+}
+
+/* Radio Buttons */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.radio-label:hover {
+    background: var(--neutral-100);
+}
+
+.radio-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-500);
+}
+
+.radio-label span {
+    font-size: var(--font-size-base);
+    color: var(--neutral-700);
+}
+
 /* === Responsive === */
 @media (max-width: 640px) {
     .form-row {
