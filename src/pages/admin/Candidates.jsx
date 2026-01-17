@@ -74,6 +74,8 @@ function Candidates() {
     const statusOptions = [
         { value: 'pending', label: 'Pendiente', color: 'warning' },
         { value: 'reviewed', label: 'Revisado', color: 'info' },
+        { value: 'psychometric_pending', label: 'Prueba Pendiente', color: 'purple' },
+        { value: 'psychometric_completed', label: 'Prueba Completada', color: 'teal' },
         { value: 'contacted', label: 'Contactado', color: 'info' },
         { value: 'interviewed', label: 'Entrevistado', color: 'info' },
         { value: 'hired', label: 'Contratado', color: 'success' },

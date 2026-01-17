@@ -11,6 +11,7 @@ import Recruiters from './admin/Recruiters'
 import Positions from './admin/Positions'
 import ImprovementRequests from './admin/ImprovementRequests'
 import RequestsManager from './admin/RequestsManager'
+import PsychometricAdmin from './admin/PsychometricAdmin'
 import './Admin.css'
 
 // Email del admin/desarrollador principal
@@ -143,6 +144,18 @@ function Admin() {
                     </NavLink>
 
                     <NavLink
+                        to="/admin/psicometricas"
+                        className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                        onClick={() => setSidebarOpen(false)}
+                    >
+                        <svg className="sidebar-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        Psicométricas
+                    </NavLink>
+
+                    <NavLink
                         to="/admin/reclutadoras"
                         className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
                         onClick={() => setSidebarOpen(false)}
@@ -257,6 +270,7 @@ function Admin() {
                         <Route index element={<Navigate to="vacantes" replace />} />
                         <Route path="vacantes" element={<VacancyManager />} />
                         <Route path="candidatos" element={<Candidates />} />
+                        <Route path="psicometricas" element={<PsychometricAdmin />} />
                         <Route path="reclutadoras" element={<Recruiters />} />
                         <Route path="puestos" element={<Positions />} />
                         <Route path="solicitudes" element={

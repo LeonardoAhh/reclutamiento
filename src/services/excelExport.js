@@ -13,25 +13,65 @@ export const exportCandidatesToExcel = (candidates, vacancies, filename = 'candi
         vacancyMap[v.id] = v.title;
     });
 
+    // Collect all unique questions across all candidates
+    const allQuestions = new Set();
+    candidates.forEach(candidate => {
+        if (candidate.answers && Array.isArray(candidate.answers)) {
+            candidate.answers.forEach(answer => {
+                if (answer.question) {
+                    allQuestions.add(answer.question);
+                }
+            });
+        }
+    });
+    const questionsList = Array.from(allQuestions);
+
     // Transform data for Excel
-    const excelData = candidates.map((candidate, index) => ({
-        'No.': index + 1,
-        'Nombre Completo': candidate.fullName || '',
-        'Email': candidate.email || '',
-        'Teléfono': candidate.phone || '',
-        'Vacante': vacancyMap[candidate.vacancyId] || candidate.vacancyTitle || 'No especificada',
-        'Experiencia': candidate.experience || '',
-        'Mensaje': candidate.message || '',
-        'Estado': getStatusLabel(candidate.status),
-        'Fecha de Postulación': formatDate(candidate.createdAt)
-    }));
+    const excelData = candidates.map((candidate, index) => {
+        const baseData = {
+            'No.': index + 1,
+            'Nombre Completo': candidate.fullName || '',
+            'Email': candidate.email || '',
+            'Teléfono': candidate.phone || '',
+            'Vacante': vacancyMap[candidate.vacancyId] || candidate.vacancyTitle || 'No especificada',
+            'Experiencia': candidate.experience || '',
+            'Mensaje': candidate.message || '',
+            'Estado': getStatusLabel(candidate.status),
+            'Fecha de Postulación': formatDate(candidate.createdAt)
+        };
+
+        // Add answers to questions dynamically
+        if (candidate.answers && Array.isArray(candidate.answers)) {
+            candidate.answers.forEach(answer => {
+                if (answer.question) {
+                    // Truncate question if too long for column header
+                    const questionKey = answer.question.length > 50
+                        ? answer.question.substring(0, 47) + '...'
+                        : answer.question;
+                    baseData[`Pregunta: ${questionKey}`] = answer.answer || '';
+                }
+            });
+        }
+
+        // Fill in empty answers for questions this candidate didn't answer
+        questionsList.forEach(question => {
+            const questionKey = question.length > 50
+                ? question.substring(0, 47) + '...'
+                : question;
+            if (!baseData[`Pregunta: ${questionKey}`]) {
+                baseData[`Pregunta: ${questionKey}`] = '';
+            }
+        });
+
+        return baseData;
+    });
 
     // Create workbook and worksheet
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(excelData);
 
-    // Set column widths
-    worksheet['!cols'] = [
+    // Set column widths - base columns plus dynamic question columns
+    const baseColWidths = [
         { wch: 5 },   // No.
         { wch: 30 },  // Nombre
         { wch: 30 },  // Email
@@ -39,9 +79,13 @@ export const exportCandidatesToExcel = (candidates, vacancies, filename = 'candi
         { wch: 25 },  // Vacante
         { wch: 40 },  // Experiencia
         { wch: 40 },  // Mensaje
-        { wch: 15 },  // Estado
+        { wch: 18 },  // Estado
         { wch: 20 }   // Fecha
     ];
+
+    // Add width for each question column
+    const questionColWidths = questionsList.map(() => ({ wch: 40 }));
+    worksheet['!cols'] = [...baseColWidths, ...questionColWidths];
 
     // Add worksheet to workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Candidatos');
@@ -94,6 +138,8 @@ const getStatusLabel = (status) => {
     const statusLabels = {
         'pending': 'Pendiente',
         'reviewed': 'Revisado',
+        'psychometric_pending': 'Prueba Pendiente',
+        'psychometric_completed': 'Prueba Completada',
         'contacted': 'Contactado',
         'interviewed': 'Entrevistado',
         'hired': 'Contratado',
